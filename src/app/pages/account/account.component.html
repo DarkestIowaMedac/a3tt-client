@@ -1,0 +1,150 @@
+<div class="container mt-4">
+  <div class="row">
+    <!-- Formulario de Login -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3><i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión</h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onLoginSubmit()" #loginForm="ngForm">
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input 
+              type="email" 
+              class="form-control" 
+              placeholder="tucorreo@ejemplo.com" 
+              name="email" 
+              [(ngModel)]="loginData.email"
+              required
+              email
+              #email="ngModel"
+              >
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Contraseña</label>
+              <input 
+              type="password" 
+              class="form-control" 
+              placeholder="••••••••"
+              name="password" 
+              [(ngModel)]="loginData.password"
+              (input)="checkPasswordRequirements()"
+              #password="ngModel">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario de Registro -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          <h3><i class="fas fa-user-plus me-2"></i>Registro</h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onRegisterSubmit()" #registerForm="ngForm">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Tu nombre" 
+                name="name"
+                [(ngModel)]="registerData.name" 
+                required
+                minlength="3"
+                #name="ngModel"
+              >
+              <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+                  <div *ngIf="name.errors?.['required']">El nombre es requerido</div>
+                  <div *ngIf="name.errors?.['minlength']">Mínimo 3 caracteres</div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                placeholder="tucorreo@ejemplo.com"
+                name="email" 
+                [(ngModel)]="registerData.email"
+                required
+                email
+                #email="ngModel"
+              >
+              <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+                  <div *ngIf="email.errors?.['required']">El email es requerido</div>
+                  <div *ngIf="email.errors?.['email']">Email inválido</div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Contraseña</label>
+              <input 
+              type="password" 
+              class="form-control" 
+              placeholder="••••••••"
+              name="password" 
+              [(ngModel)]="registerData.password"
+              (input)="checkPasswordRequirements()"
+              #password="ngModel"
+            >
+            <div class="mt-2">
+              <div class="d-flex align-items-center mb-1">
+                <span class="me-2" [ngClass]="{'text-success': passwordRequirements.length, 'text-danger': !passwordRequirements.length}">
+                  <i class="fas" [class.fa-check-circle]="passwordRequirements.length" [class.fa-times-circle]="!passwordRequirements.length"></i>
+                </span>
+                <span [ngClass]="{'text-success': passwordRequirements.length, 'text-muted': !passwordRequirements.length}">
+                  Al menos 8 caracteres
+                </span>
+              </div>
+              
+              <div class="d-flex align-items-center mb-1">
+                <span class="me-2" [ngClass]="{'text-success': passwordRequirements.lowerCase, 'text-danger': !passwordRequirements.lowerCase}">
+                  <i class="fas" [class.fa-check-circle]="passwordRequirements.lowerCase" [class.fa-times-circle]="!passwordRequirements.lowerCase"></i>
+                </span>
+                <span [ngClass]="{'text-success': passwordRequirements.lowerCase, 'text-muted': !passwordRequirements.lowerCase}">
+                  Al menos 1 letra minúscula
+                </span>
+              </div>
+              
+              <div class="d-flex align-items-center mb-1">
+                <span class="me-2" [ngClass]="{'text-success': passwordRequirements.upperCase, 'text-danger': !passwordRequirements.upperCase}">
+                  <i class="fas" [class.fa-check-circle]="passwordRequirements.upperCase" [class.fa-times-circle]="!passwordRequirements.upperCase"></i>
+                </span>
+                <span [ngClass]="{'text-success': passwordRequirements.upperCase, 'text-muted': !passwordRequirements.upperCase}">
+                  Al menos 1 letra mayúscula
+                </span>
+              </div>
+              
+              <div class="d-flex align-items-center mb-1">
+                <span class="me-2" [ngClass]="{'text-success': passwordRequirements.number, 'text-danger': !passwordRequirements.number}">
+                  <i class="fas" [class.fa-check-circle]="passwordRequirements.number" [class.fa-times-circle]="!passwordRequirements.number"></i>
+                </span>
+                <span [ngClass]="{'text-success': passwordRequirements.number, 'text-muted': !passwordRequirements.number}">
+                  Al menos 1 número
+                </span>
+              </div>
+              
+              <div class="d-flex align-items-center">
+                <span class="me-2" [ngClass]="{'text-success': passwordRequirements.specialChar, 'text-danger': !passwordRequirements.specialChar}">
+                  <i class="fas" [class.fa-check-circle]="passwordRequirements.specialChar" [class.fa-times-circle]="!passwordRequirements.specialChar"></i>
+                </span>
+                <span [ngClass]="{'text-success': passwordRequirements.specialChar, 'text-muted': !passwordRequirements.specialChar}">
+                  Al menos 1 carácter especial ($!%*?&)
+                </span>
+              </div>
+            </div>
+          </div>
+            <button type="submit" 
+            class="btn btn-success w-100" 
+            [disabled]="!registerForm.form.valid">Crear cuenta</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+ng generate module components/layout: Crea el módulo en una carpeta con el nombre final y dicho módulo se llama igual
+
+ng generate component components/footer: --skip-import --inline-template false --inline-style false
+Crea un componente en una carpeta llamado footer (en este caso). Omite las importaciones para hacerlas a mano 
+(y aprender), y separa los archivos de template y estilo.
+
+ng new a3tt-client: --standalone=false Crea el proyecto
+
+ng serve: Inicia el proyecto
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process: Habilita los scripts
