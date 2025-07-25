@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { AccountModule } from './account/account.module';
 import { TasksModule } from './tasks/tasks.module';
 import { HomeModule } from './home/home.module';
+import { TutorialModule } from './tutorial/tutorial.module';
+import { IncomingFeaturesModule } from './incoming-features/incoming-features.module';
 
 
 
@@ -14,6 +15,8 @@ import { HomeModule } from './home/home.module';
     AccountModule,
     TasksModule,
     HomeModule,
+    TutorialModule,
+    IncomingFeaturesModule,
     CommonModule,
   ],
   exports: []

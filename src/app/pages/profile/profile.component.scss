@@ -1,0 +1,26 @@
+@use 'bootstrap/scss/bootstrap' as bs;
+
+.profile-card {
+  .avatar-img {
+    object-fit: cover;
+    border: 3px solid bs.$primary;
+  }
+
+  .stat-card {
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: bs.$box-shadow-sm;
+    }
+  }
+
+  .btn-edit {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    
+    &:hover {
+      box-shadow: 0 0.5rem 1rem rgba(bs.$primary, 0.15);
+    }
+  }
+}

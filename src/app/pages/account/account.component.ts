@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../shared/services/api.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-account',
@@ -27,7 +28,10 @@ export class AccountComponent {
     specialChar: false
   };
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private authService: AuthService, 
+  ) {}
 
   onRegisterSubmit() {
     this.apiService.post(`users`,this.registerData).subscribe({
@@ -43,7 +47,7 @@ export class AccountComponent {
   }
 
   onLoginSubmit() {
-    this.apiService.post(`auth/login`,this.loginData).subscribe({
+    this.authService.login(this.loginData).subscribe({
       next: (response) => {
         console.log('Registro exitoso', response);
         alert(response.access_token);

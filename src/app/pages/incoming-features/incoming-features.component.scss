@@ -1,0 +1,24 @@
+// Estilos personalizados
+.feature-card {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+.badge {
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+}
+
+.btn-outline-primary {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: var(--bs-primary);
+    color: white;
+  }
+}

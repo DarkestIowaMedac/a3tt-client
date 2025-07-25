@@ -3,16 +3,23 @@
     <div class="row align-items-center">
       <div class="col">
         <div class="d-flex align-items-center">
-          <a routerLink="/home" class="header-icon me-3" title="Inicio">
+          <a [routerLink]="authService.isLoggedIn() ? '/tutorial' : '/home'" 
+            class="header-icon me-3" 
+            [title]="authService.isLoggedIn() ? 'Tutorial' : 'Inicio'">
             <i class="fas fa-home"></i>
           </a>
-          <a routerLink="/tasks" class="header-icon" title="Mis Tareas">
+
+          <a [routerLink]="authService.isLoggedIn() ? '/tasks' : '/incomingFeatures'" 
+            class="header-icon" 
+            [title]="authService.isLoggedIn() ? 'Mis Tareas' : 'Funcionalidades'">
             <i class="fas fa-paint-brush"></i>
           </a>
         </div>
       </div>
       <div class="col-auto">
-        <a routerLink="/account" class="header-icon" title="Perfil">
+        <a [routerLink]="authService.isLoggedIn() ? '/profile' : '/login'" 
+           class="header-icon" 
+           [title]="authService.isLoggedIn() ? 'Perfil' : 'Iniciar sesión'">
           <i class="fas fa-user"></i>
         </a>
       </div>
