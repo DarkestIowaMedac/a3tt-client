@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from './api.service';
 import { BehaviorSubject, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,7 @@ export class AuthService {
       // Compara con el tiempo actual (conversión de ms a segundos)
       return expirationTime < Math.floor(Date.now() / 1000);
     } catch {
-      return true; // Si hay error al decodificar
+      return true; 
     }
   }
 
@@ -98,6 +99,15 @@ export class AuthService {
       return null;
     }
     return token 
+  }
+
+  getDecodedToken(): any {
+    const token = this.getToken()
+
+    if (token == null) {
+      return null
+    }
+    return jwtDecode(token);
   }
 
   isLoggedIn(): boolean {

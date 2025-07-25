@@ -1,0 +1,104 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Editar Perfil</h2>
+      <button class="close-btn" (click)="onClose()">&times;</button>
+    </div>
+    
+    <div class="modal-body">
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group mb-3">
+          <label class="form-label">Nuevo nombre</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="name" 
+            name="name"
+            placeholder="Dejar vacío para no cambiar"
+          >
+          <div class="text-danger mt-1" *ngIf="name.length > 0 && name.length < 3">
+            Mínimo 3 caracteres
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label">Nueva contraseña</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            [(ngModel)]="newPassword" 
+            name="newPassword"
+            placeholder="Dejar vacío para no cambiar"
+            (input)="checkPasswordRequirements()"
+          >
+          
+          <div class="mt-2" *ngIf="passwordTouched">
+            <div class="d-flex align-items-center mb-1">
+              <span class="me-2" [class.text-success]="reqLength" [class.text-danger]="!reqLength">
+                <i class="fas" [class.fa-check-circle]="reqLength" [class.fa-times-circle]="!reqLength"></i>
+              </span>
+              <span [class.text-success]="reqLength" [class.text-muted]="!reqLength">
+                Al menos 8 caracteres
+              </span>
+            </div>
+            
+            <div class="d-flex align-items-center mb-1">
+              <span class="me-2" [class.text-success]="reqLowerCase" [class.text-danger]="!reqLowerCase">
+                <i class="fas" [class.fa-check-circle]="reqLowerCase" [class.fa-times-circle]="!reqLowerCase"></i>
+              </span>
+              <span [class.text-success]="reqLowerCase" [class.text-muted]="!reqLowerCase">
+                Al menos 1 letra minúscula
+              </span>
+            </div>
+            
+            <div class="d-flex align-items-center mb-1">
+              <span class="me-2" [class.text-success]="reqUpperCase" [class.text-danger]="!reqUpperCase">
+                <i class="fas" [class.fa-check-circle]="reqUpperCase" [class.fa-times-circle]="!reqUpperCase"></i>
+              </span>
+              <span [class.text-success]="reqUpperCase" [class.text-muted]="!reqUpperCase">
+                Al menos 1 letra mayúscula
+              </span>
+            </div>
+            
+            <div class="d-flex align-items-center mb-1">
+              <span class="me-2" [class.text-success]="reqNumber" [class.text-danger]="!reqNumber">
+                <i class="fas" [class.fa-check-circle]="reqNumber" [class.fa-times-circle]="!reqNumber"></i>
+              </span>
+              <span [class.text-success]="reqNumber" [class.text-muted]="!reqNumber">
+                Al menos 1 número
+              </span>
+            </div>
+            
+            <div class="d-flex align-items-center">
+              <span class="me-2" [class.text-success]="reqSpecialChar" [class.text-danger]="!reqSpecialChar">
+                <i class="fas" [class.fa-check-circle]="reqSpecialChar" [class.fa-times-circle]="!reqSpecialChar"></i>
+              </span>
+              <span [class.text-success]="reqSpecialChar" [class.text-muted]="!reqSpecialChar">
+                Al menos 1 carácter especial ($!%*?&)
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-danger mb-3" *ngIf="(name.length < 3 || !newPassword) && (name.length > 0 || newPassword.length > 0)">
+          Debes completar al menos un campo válido
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="onClose()">Cancelar</button>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="!formValid || isSubmitting"
+          >
+            <span *ngIf="!isSubmitting">Guardar</span>
+            <span *ngIf="isSubmitting">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Guardando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

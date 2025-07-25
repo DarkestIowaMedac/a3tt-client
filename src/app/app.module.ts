@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LayoutModule } from './components/layout/layout/layout.module';
 import { PagesModule } from './pages/pages.module';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
 
@@ -19,7 +19,8 @@ import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
     LayoutModule,
     PagesModule,
   ],
-  providers: [provideHttpClient(), { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
+  providers: [provideHttpClient(withInterceptorsFromDi() ), 
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -28,6 +28,8 @@ export class AccountComponent {
     specialChar: false
   };
 
+  passwordTouched = false;
+
   constructor(
     private apiService: ApiService,
     private authService: AuthService, 
@@ -68,5 +70,11 @@ export class AccountComponent {
       number: /\d/.test(pass),
       specialChar: /[\W_]/.test(pass)
     };
+
+    if (pass && pass.length > 0) {
+      this.passwordTouched = true;
+    } else {
+      this.passwordTouched = false;
+    }
   }
 }

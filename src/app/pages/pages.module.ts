@@ -5,6 +5,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { HomeModule } from './home/home.module';
 import { TutorialModule } from './tutorial/tutorial.module';
 import { IncomingFeaturesModule } from './incoming-features/incoming-features.module';
+import { ProfileModule } from './profile/profile.module';
 
 
 
@@ -17,6 +18,7 @@ import { IncomingFeaturesModule } from './incoming-features/incoming-features.mo
     HomeModule,
     TutorialModule,
     IncomingFeaturesModule,
+    ProfileModule,
     CommonModule,
   ],
   exports: []

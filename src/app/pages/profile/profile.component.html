@@ -5,10 +5,13 @@
         <div class="card-body p-4">
           <!-- Header del perfil -->
           <div class="d-flex flex-column align-items-center text-center mb-4">
-            <img [src]="user.avatar" alt="Avatar" class="rounded-circle mb-3" width="120" height="120">
+            <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center mb-3" 
+                 style="width: 120px; height: 120px;">
+              <i class="bi bi-person-fill text-primary" style="font-size: 3rem;"></i>
+            </div>
             <h2 class="mb-1">{{ user.name }}</h2>
             <p class="text-muted mb-3">{{ user.email }}</p>
-            <span class="badge bg-primary rounded-pill px-3">Miembro desde {{ user.joinDate }}</span>
+            <span class="badge bg-primary rounded-pill px-3">Usuario #{{ user.id }}</span>
           </div>
 
           <!-- Sección de información -->
@@ -18,17 +21,17 @@
                 <div class="card-body">
                   <h3 class="h5 mb-3">
                     <i class="bi bi-person-lines-fill me-2 text-primary"></i>
-                    Información Personal
+                    Información Básica
                   </h3>
                   <ul class="list-unstyled">
+                    <li class="mb-2">
+                      <strong>Número de Usuario:</strong> {{ user.id }}
+                    </li>
                     <li class="mb-2">
                       <strong>Nombre:</strong> {{ user.name }}
                     </li>
                     <li class="mb-2">
                       <strong>Email:</strong> {{ user.email }}
-                    </li>
-                    <li class="mb-2">
-                      <strong>Bio:</strong> {{ user.bio }}
                     </li>
                   </ul>
                 </div>
@@ -40,7 +43,7 @@
                 <div class="card-body">
                   <h3 class="h5 mb-3">
                     <i class="bi bi-bar-chart-line-fill me-2 text-primary"></i>
-                    Estadísticas
+                    Tu Productividad
                   </h3>
                   <div class="d-flex flex-wrap gap-3">
                     <div class="text-center p-3 bg-white rounded-3 shadow-sm flex-grow-1">
@@ -48,12 +51,12 @@
                       <small class="text-muted">Tareas completadas</small>
                     </div>
                     <div class="text-center p-3 bg-white rounded-3 shadow-sm flex-grow-1">
-                      <div class="h4 text-primary mb-0">{{ user.stats.projects }}</div>
-                      <small class="text-muted">Proyectos</small>
+                      <div class="h4 text-primary mb-0">{{ user.stats.tasksPending }}</div>
+                      <small class="text-muted">Tareas pendientes</small>
                     </div>
                     <div class="text-center p-3 bg-white rounded-3 shadow-sm flex-grow-1">
-                      <div class="h4 text-primary mb-0">{{ user.stats.lastActive }}</div>
-                      <small class="text-muted">Última actividad</small>
+                      <div class="h4 text-primary mb-0">{{ user.stats.categories }}</div>
+                      <small class="text-muted">Categorías</small>
                     </div>
                   </div>
                 </div>
@@ -63,13 +66,13 @@
 
           <!-- Acciones -->
           <div class="d-flex justify-content-center gap-3">
-            <button class="btn btn-primary px-4">
+            <button class="btn btn-primary px-4" (click)="openEditModal()">
               <i class="bi bi-pencil-square me-2"></i>
               Editar Perfil
             </button>
             <button class="btn btn-outline-danger px-4" (click)="logout()">
-                <i class="bi bi-box-arrow-right me-2"></i>
-                Cerrar Sesión
+              <i class="bi bi-box-arrow-right me-2"></i>
+              Cerrar Sesión
             </button>
           </div>
         </div>
