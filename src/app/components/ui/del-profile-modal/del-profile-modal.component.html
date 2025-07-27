@@ -1,0 +1,63 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header bg-danger text-white">
+      <h2>Borrar Cuenta Permanentemente</h2>
+      <button class="close-btn text-white" (click)="onClose()">&times;</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="alert alert-danger mb-4">
+        <strong>¡Advertencia!</strong> Esta acción es irreversible. Todos tus datos serán eliminados permanentemente.
+      </div>
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group mb-3">
+          <label class="form-label">Ingresa tu email para confirmar</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            [(ngModel)]="email" 
+            name="email"
+            placeholder="tu@email.com"
+            required
+          >
+          <div class="text-danger mt-1" *ngIf="errorMessage?.includes('email')">
+            {{errorMessage}}
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label class="form-label">Ingresa tu contraseña</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            [(ngModel)]="password" 
+            name="password"
+            placeholder="Tu contraseña actual"
+            required
+          >
+          <div class="text-danger mt-1" *ngIf="errorMessage?.includes('contraseña') || errorMessage?.includes('Credenciales')">
+            {{errorMessage}}
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="onClose()" [disabled]="isSubmitting">
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-danger" 
+            [disabled]="isSubmitting || !email || !password"
+          >
+            <span *ngIf="!isSubmitting">Confirmar Borrado</span>
+            <span *ngIf="isSubmitting">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Procesando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

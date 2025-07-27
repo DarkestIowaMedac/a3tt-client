@@ -4,6 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 import { ApiService } from '../../shared/services/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EdProfileModalComponent } from '../../components/ui/ed-profile-modal/ed-profile-modal.component';
+import { DelProfileModalComponent } from '../../components/ui/del-profile-modal/del-profile-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -29,7 +31,8 @@ export class ProfileComponent {
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +79,23 @@ export class ProfileComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.user.name = result.name; // Actualiza el nombre si se editó
+      }
+    });
+  }
+
+  openDeleteModal(): void {
+    const dialogRef = this.dialog.open(DelProfileModalComponent, {
+      width: '500px',
+      data: { currentEmail: this.user.email }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.authService.logout();
+        this.snackBar.open(result.message || 'Cuenta eliminada exitosamente', 'Cerrar', {
+        duration: 5000,
+        panelClass: ['success-snackbar']
+      });
       }
     });
   }

@@ -28,7 +28,9 @@ export class ApiService {
     return this.http.patch(`${this.apiUrl}/${endpoint}`, data);
   }
   
-  delete(endpoint: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${endpoint}`);
+  deleteWithBody(endpoint: string, data: any): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${endpoint}`, {
+    body: data // Esta es la forma correcta de enviar datos en DELETE
+    });
   }
 }

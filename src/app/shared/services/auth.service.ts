@@ -60,12 +60,14 @@ export class AuthService {
     }
   }
 
-  login(credentials: {email: string, password: string}) {
+  login(credentials: {email: string, password: string}, redirect: boolean = true) {
     return this.apiService.post('auth/login', credentials).pipe(
       tap(response => {
         if (!response.access_token) throw new Error('Invalid response');
         this.saveToken(response.access_token); 
+        if(redirect){
         this.router.navigate(['/tutorial']);
+        }
       })
     );
   }
