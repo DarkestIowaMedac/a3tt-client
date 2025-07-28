@@ -134,6 +134,29 @@ export class TasksComponent implements OnInit {
   updateTaskInArray(this.uncategorizedTasks.completed);
   }
 
+  // tasks.component.ts
+deleteTask(task: any): void {
+  this.taskService.delete(task.id).subscribe({
+    next: () => {
+      this.removeTaskFromLists(task.id);
+    },
+    error: (err) => {
+      console.error('Error al eliminar la tarea:', err);
+    }
+  });
+}
+
+private removeTaskFromLists(taskId: number): void {
+  // Eliminar de tareas categorizadas
+  for (const categoryId in this.tasksByCategory) {
+    this.tasksByCategory[categoryId].pending = this.tasksByCategory[categoryId].pending.filter(t => t.id !== taskId);
+    this.tasksByCategory[categoryId].completed = this.tasksByCategory[categoryId].completed.filter(t => t.id !== taskId);
+  }
+  
+  // Eliminar de tareas sin categoría
+  this.uncategorizedTasks.pending = this.uncategorizedTasks.pending.filter(t => t.id !== taskId);
+  this.uncategorizedTasks.completed = this.uncategorizedTasks.completed.filter(t => t.id !== taskId);
+}
   startEditing(category: any): void {
     this.editingCategory = { id: category.id, name: category.name };
   }

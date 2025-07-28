@@ -40,3 +40,30 @@
   font-size: 0.875rem;
   border-radius: 0.2rem;
 }
+
+.btn-group {
+  .btn {
+    padding: 0.25rem 0.5rem;
+    margin-left: 0.25rem;
+    
+    &.btn-outline-danger {
+      color: #dc3545;
+      border-color: #dc3545;
+      
+      &:hover {
+        background-color: #dc3545;
+        color: white;
+      }
+    }
+    
+    &.btn-outline-info {
+      color: #0dcaf0;
+      border-color: #0dcaf0;
+      
+      &:hover {
+        background-color: #0dcaf0;
+        color: white;
+      }
+    }
+  }
+}

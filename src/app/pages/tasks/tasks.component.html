@@ -75,6 +75,9 @@
             <button class="btn btn-sm btn-outline-info" (click)="openTaskDetails(task)">
               <i class="fas fa-info-circle"></i>
             </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task)">
+              <i class="fas fa-trash"></i>
+            </button>
           </div>
         </li>
       </ul>
@@ -98,6 +101,9 @@
                 <label class="form-check-label flex-grow-1">{{ task.name }}</label>
                 <button class="btn btn-sm btn-outline-info" (click)="openTaskDetails(task)">
                   <i class="fas fa-info-circle"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task)">
+                  <i class="fas fa-trash"></i>
                 </button>
               </div>
             </li>
@@ -127,6 +133,9 @@
             <button class="btn btn-sm btn-outline-info" (click)="openTaskDetails(task)">
               <i class="fas fa-info-circle"></i>
             </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task)">
+              <i class="fas fa-trash"></i>
+            </button>
           </div>
         </li>
       </ul>
@@ -148,6 +157,9 @@
               <label class="form-check-label flex-grow-1">{{ task.name }}</label>
               <button class="btn btn-sm btn-outline-info" (click)="openTaskDetails(task)">
                 <i class="fas fa-info-circle"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteTask(task)">
+                <i class="fas fa-trash"></i>
               </button>
             </div>
           </li>
