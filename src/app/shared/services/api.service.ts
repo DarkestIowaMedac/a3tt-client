@@ -33,4 +33,8 @@ export class ApiService {
     body: data // Esta es la forma correcta de enviar datos en DELETE
     });
   }
+
+  delete(endpoint: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${endpoint}`);
+  }
 }

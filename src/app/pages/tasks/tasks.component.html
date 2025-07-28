@@ -1,8 +1,76 @@
+<!-- tasks.component.html -->
 <div class="container mt-4">
   <h1 class="mb-4">
     <i class="fas fa-tasks me-2"></i>Mis Tareas
   </h1>
-  <div class="alert alert-info">
-    Aquí aparecerá tu lista de tareas. ¡Próximamente!
+
+  <!-- Formulario para nueva categoría -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Nueva Categoría</h5>
+      <div class="input-group">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Nombre de la categoría"
+          [(ngModel)]="newCategoryName"
+          (keyup.enter)="createCategory()"
+        >
+        <button class="btn btn-primary" (click)="createCategory()">
+          <i class="fas fa-plus me-1"></i>Crear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de categorías -->
+  <div *ngFor="let category of categories$ | async" class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div *ngIf="editingCategory.id !== category.id; else editTemplate">
+        <h5 class="mb-0">{{ category.name }}</h5>
+      </div>
+      <ng-template #editTemplate>
+        <div class="input-group">
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="editingCategory.name"
+            (keyup.enter)="updateCategory()"
+            #editInput
+            (focus)="editInput.select()"
+          >
+          <button class="btn btn-sm btn-success" (click)="updateCategory()">
+            <i class="fas fa-check"></i>
+          </button>
+          <button class="btn btn-sm btn-secondary" (click)="cancelEditing()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </ng-template>
+
+      <!-- Botones (solo mostrar cuando no esté editando) -->
+      <div *ngIf="editingCategory.id !== category.id">
+        <button class="btn btn-sm btn-outline-secondary me-2" 
+                (click)="startEditing(category)">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-danger" 
+                (click)="openDeleteDialog(category)">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <p class="text-muted">Tareas aparecerán aquí...</p>
+      <button class="btn btn-sm btn-link">
+        <i class="fas fa-eye me-1"></i>Ver completadas
+      </button>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay categorías -->
+  <div *ngIf="(categories$ | async)?.length === 0" class="alert alert-info">
+    No tienes ninguna categoría creada. ¡Crea una para empezar!
   </div>
 </div>

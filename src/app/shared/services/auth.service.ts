@@ -50,11 +50,13 @@ export class AuthService {
       
       if (!payload.iat) return true;
       
-      const tokenLifetime = 3600; 
+      const tokenLifetime = 1*60*60*1000; 
       const expirationTime = payload.iat + tokenLifetime;
+      console.log("el iat"+payload.iat)
+      console.log("el expirationtime"+expirationTime)
+      console.log(expirationTime < Math.floor(Date.now()))
       
-      // Compara con el tiempo actual (conversión de ms a segundos)
-      return expirationTime < Math.floor(Date.now() / 1000);
+      return expirationTime < Math.floor(Date.now());
     } catch {
       return true; 
     }

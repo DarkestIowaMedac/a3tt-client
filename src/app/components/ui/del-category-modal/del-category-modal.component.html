@@ -1,0 +1,37 @@
+<!-- delete-category-modal.component.html -->
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header bg-danger text-white">
+      <h2>Eliminar Categoría</h2>
+      <button class="close-btn text-white" (click)="onCancel()">&times;</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="alert alert-danger mb-4">
+        <strong>¡Advertencia!</strong> Estás a punto de eliminar la categoría <strong>{{data.categoryName}}</strong>.
+        Esta acción no se puede deshacer.
+      </div>
+
+      <div class="alert alert-warning" *ngIf="errorMessage">
+        {{errorMessage}}
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="onCancel()" [disabled]="isSubmitting">
+        Cancelar
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-danger" 
+        (click)="onConfirm()"
+        [disabled]="isSubmitting"
+      >
+        <span [class.invisible]="isSubmitting">Eliminar</span>
+            <span *ngIf="isSubmitting" class="position-absolute start-50 translate-middle-x">
+            <span class="spinner-border spinner-border-sm" role="status"></span>
+            </span>
+        </button>
+    </div>
+  </div>
+</div>
