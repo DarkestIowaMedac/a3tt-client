@@ -2,49 +2,48 @@
 <div class="modal-overlay" (click)="onCancel()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header bg-primary text-white">
-      <h2>{{ data.categoryId ? 'Nueva Tarea' : 'Nueva Tarea sin Categoría' }}</h2>
+      <h2>{{ isEditMode ? 'Editar Tarea' : (data.categoryId ? 'Nueva Tarea' : 'Nueva Tarea sin Categoría') }}</h2>
       <button class="close-btn text-white" (click)="onCancel()">&times;</button>
     </div>
     
     <div class="modal-body">
-      <form [formGroup]="taskForm">
+    <form [formGroup]="taskForm">
         <div class="mb-3">
-          <label for="taskName" class="form-label">Nombre de la tarea *</label>
-          <input 
+        <label for="taskName" class="form-label">Nombre de la tarea</label> <!-- Quitamos el * -->
+        <input 
             type="text" 
             class="form-control" 
             id="taskName"
             formControlName="name"
+            placeholder="Opcional"
             [class.is-invalid]="taskForm.get('name')?.invalid && taskForm.get('name')?.touched"
-          >
-          <div *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched" class="invalid-feedback">
-            <div *ngIf="taskForm.get('name')?.errors?.['required']">
-              El nombre es obligatorio
-            </div>
+        >
+        <div *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched" class="invalid-feedback">
             <div *ngIf="taskForm.get('name')?.errors?.['maxlength']">
-              Máximo 100 caracteres
+            Máximo 100 caracteres
             </div>
-          </div>
+        </div>
         </div>
 
         <div class="mb-3">
-          <label for="taskDescription" class="form-label">Descripción</label>
-          <textarea 
+        <label for="taskDescription" class="form-label">Descripción</label>
+        <textarea 
             class="form-control" 
             id="taskDescription"
             formControlName="description"
             rows="3"
+            placeholder="Opcional"
             [class.is-invalid]="taskForm.get('description')?.invalid && taskForm.get('description')?.touched"
-          ></textarea>
-          <div *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched" class="invalid-feedback">
+        ></textarea>
+        <div *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched" class="invalid-feedback">
             Máximo 500 caracteres
-          </div>
+        </div>
         </div>
 
         <div class="alert alert-warning" *ngIf="errorMessage">
-          {{errorMessage}}
+        {{errorMessage}}
         </div>
-      </form>
+    </form>
     </div>
     
     <div class="modal-footer">
@@ -55,9 +54,11 @@
         type="button" 
         class="btn btn-primary" 
         (click)="onSubmit()"
-        [disabled]="isSubmitting || taskForm.invalid"
+        [disabled]="isSubmitting"
       >
-        <span [class.invisible]="isSubmitting">Crear Tarea</span>
+        <span [class.invisible]="isSubmitting">
+            {{ isEditMode ? 'Actualizar Tarea' : 'Crear Tarea' }}
+        </span>
         <span *ngIf="isSubmitting" class="position-absolute start-50 translate-middle-x">
           <span class="spinner-border spinner-border-sm" role="status"></span>
         </span>

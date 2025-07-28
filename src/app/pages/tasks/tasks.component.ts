@@ -98,13 +98,40 @@ export class TasksComponent implements OnInit {
     this.showUncategorizedCompleted = !this.showUncategorizedCompleted;
   }
 
-  // Métodos para manejar tareas (los implementarás más adelante)
-  toggleTaskState(task: any): void {
-    // Implementar lógica para cambiar estado de tarea
+  openTaskDetails(task: any): void {
+  const dialogRef = this.dialog.open(CreateTaskModalComponent, {
+    width: '500px',
+    data: { 
+      task: task, // Enviamos la tarea completa
+      categoryId: task.category?.id || -1,
+      isEditMode: true // Activamos el modo edición
+    }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result?.success) {
+      this.updateTaskInLists(result.task);
+    }
+  });
   }
 
-  openTaskDetails(task: any): void {
-    // Implementar lógica para ver detalles de tarea
+  private updateTaskInLists(updatedTask: any): void {
+  const updateTaskInArray = (array: any[]) => {
+    const index = array.findIndex(t => t.id === updatedTask.id);
+    if (index !== -1) {
+      array[index] = updatedTask;
+    }
+  };
+
+  // Buscar en tareas categorizadas
+  for (const categoryId in this.tasksByCategory) {
+    updateTaskInArray(this.tasksByCategory[categoryId].pending);
+    updateTaskInArray(this.tasksByCategory[categoryId].completed);
+  }
+
+  // Buscar en tareas sin categoría
+  updateTaskInArray(this.uncategorizedTasks.pending);
+  updateTaskInArray(this.uncategorizedTasks.completed);
   }
 
   startEditing(category: any): void {
@@ -179,4 +206,73 @@ export class TasksComponent implements OnInit {
     }
   });
   }
+
+  // tasks.component.ts
+toggleTaskState(task: any): void {
+  const newState = task.state === 0 ? 1 : 0; // Cambia el estado
+  
+  this.taskService.toggleState(task.id).subscribe({
+    next: (updatedTask) => {
+      // Actualiza la tarea localmente sin recargar toda la lista
+      this.updateTaskInLocalLists(task.id, newState);
+    },
+    error: (err) => {
+      console.error('Error al cambiar el estado:', err);
+      // Puedes revertir visualmente el checkbox si falla
+      task.state = task.state; // Esto forzará el estado anterior
+    }
+  });
+}
+
+private updateTaskInLocalLists(taskId: number, newState: number): void {
+  // Buscar y actualizar en tareas con categoría
+  for (const categoryId in this.tasksByCategory) {
+    const category = this.tasksByCategory[categoryId];
+    
+    // Buscar en pendientes
+    const pendingIndex = category.pending.findIndex(t => t.id === taskId);
+    if (pendingIndex !== -1) {
+      if (newState === 1) {
+        // Mover a completadas
+        const task = category.pending.splice(pendingIndex, 1)[0];
+        task.state = newState;
+        category.completed.push(task);
+      }
+      return;
+    }
+    
+    // Buscar en completadas
+    const completedIndex = category.completed.findIndex(t => t.id === taskId);
+    if (completedIndex !== -1) {
+      if (newState === 0) {
+        // Mover a pendientes
+        const task = category.completed.splice(completedIndex, 1)[0];
+        task.state = newState;
+        category.pending.push(task);
+      }
+      return;
+    }
+  }
+  
+  // Buscar en tareas sin categoría
+  const uncatPendingIndex = this.uncategorizedTasks.pending.findIndex(t => t.id === taskId);
+  if (uncatPendingIndex !== -1) {
+    if (newState === 1) {
+      const task = this.uncategorizedTasks.pending.splice(uncatPendingIndex, 1)[0];
+      task.state = newState;
+      this.uncategorizedTasks.completed.push(task);
+    }
+    return;
+  }
+  
+  const uncatCompletedIndex = this.uncategorizedTasks.completed.findIndex(t => t.id === taskId);
+  if (uncatCompletedIndex !== -1) {
+    if (newState === 0) {
+      const task = this.uncategorizedTasks.completed.splice(uncatCompletedIndex, 1)[0];
+      task.state = newState;
+      this.uncategorizedTasks.pending.push(task);
+    }
+  }
+}
+  
 }

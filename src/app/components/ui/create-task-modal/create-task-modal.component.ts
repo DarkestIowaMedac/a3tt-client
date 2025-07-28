@@ -15,16 +15,34 @@ export class CreateTaskModalComponent {
   isSubmitting = false;
   errorMessage: string | null = null;
 
+  //--Para Edición--
+  isEditMode = false;
+  currentTaskId: number | null = null;
+  //--
+
   constructor(
     private fb: FormBuilder,
     private taskService: TaskService,
     private dialogRef: MatDialogRef<CreateTaskModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { categoryId: number | null }
+    @Inject(MAT_DIALOG_DATA) public data: { categoryId: number | null 
+      task?: any,
+      isEditMode?: boolean 
+    }
   ) {
+    this.isEditMode = data.isEditMode || false;
+
     this.taskForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
+      name: ['', [Validators.maxLength(100)]],
       description: ['', [Validators.maxLength(500)]]
     });
+
+    if (this.isEditMode && data.task) {
+      this.currentTaskId = data.task.id;
+      this.taskForm.patchValue({
+        name: data.task.name,
+        description: data.task.description
+      });
+    }
   }
 
   onSubmit(): void {
@@ -34,23 +52,48 @@ export class CreateTaskModalComponent {
     this.errorMessage = null;
 
     const taskData = {
-      name: this.taskForm.value.name,
-      description: this.taskForm.value.description,
-      categoryId: this.data.categoryId
+      name: this.taskForm.value.name.trim() || null,
+      description: this.taskForm.value.description.trim() || null,
+      //categoryId: this.data.categoryId
       //state: 0 // Pendiente por defecto
     };
 
-    this.taskService.create(taskData).subscribe({
-      next: (response) => {
-        this.dialogRef.close({ success: true, task: response });
-      },
-      error: (err) => {
-        this.isSubmitting = false;
-        this.errorMessage = err.error?.message || 'Error al crear la tarea';
-        console.error('Error:', err);
-      }
-    });
+    const payload = Object.fromEntries(
+    Object.entries(taskData).filter(([_, v]) => v !== null)
+    );
+
+    if (this.isEditMode && this.currentTaskId) {
+      this.taskService.updateDetails(this.currentTaskId, payload).subscribe({
+        next: (updatedTask) => {
+          this.dialogRef.close({ 
+            success: true, 
+            task: {
+              ...this.data.task, // Mantenemos los datos originales
+              ...updatedTask // Actualizamos con los cambios
+            }
+          });
+        },
+        error: this.handleError.bind(this)
+      });
+    } else {
+      this.taskService.create({
+        ...payload,
+        categoryId: this.data.categoryId,
+      }).subscribe({
+        next: (response) => {
+          this.dialogRef.close({ success: true, task: response });
+        },
+        error: this.handleError.bind(this)
+      });
+    }
   }
+
+  private handleError(err: any): void {
+    this.isSubmitting = false;
+    this.errorMessage = err.error?.message || 'Error al procesar la solicitud';
+    console.error('Error:', err);
+  }
+
 
   onCancel(): void {
     this.dialogRef.close();
