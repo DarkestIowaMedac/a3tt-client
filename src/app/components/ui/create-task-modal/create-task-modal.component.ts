@@ -73,7 +73,13 @@ export class CreateTaskModalComponent {
             }
           });
         },
-        error: this.handleError.bind(this)
+        error: (err) => {
+        this.isSubmitting = false;
+        console.error('Error updating task:', err);
+        this.dialogRef.close({ success: false, err: err})
+        this.handleError.bind(this)
+        //alert('Error updating profile: ' + (err.error?.message || 'Please try again'));
+        }
       });
     } else {
       this.taskService.create({
@@ -83,7 +89,12 @@ export class CreateTaskModalComponent {
         next: (response) => {
           this.dialogRef.close({ success: true, task: response });
         },
-        error: this.handleError.bind(this)
+         error: (err) => {
+        this.isSubmitting = false;
+        console.error('Error creating task:', err);
+        this.dialogRef.close({ success: false, err: err})
+        this.handleError.bind(this)
+        }
       });
     }
   }

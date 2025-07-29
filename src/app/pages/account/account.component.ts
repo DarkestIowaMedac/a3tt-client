@@ -41,16 +41,16 @@ export class AccountComponent {
     this.apiService.post(`users`,this.registerData).subscribe({
       next: (response) => {
         console.log('Registro exitoso', response);
-        alert('¡Registro exitoso!');
+        const toastId = this.toastr.success('¡Bienvenido, te deseamos una fructífera estancia!', 'Registro Correcto');
       },
       error: (error) => {
         //console.error('Error en el registro', error);
         //alert('Error en el registro: ' + (error.error?.message || 'Intente nuevamente'));
         //alert(error.error.message)
-        if(error.error?.message == "Invalid credentials"){
-          error.error?.message == "Credenciales incorrectas"
+        if(error.error?.message[0] == "Invalid credentials"){
+          error.error?.message[0] == "Credenciales incorrectas"
         }
-        const toastId = this.toastr.error((error.error?.message || 'Intente nuevamente'), 'Error en el registro');
+        const toastId = this.toastr.error((error.error?.message[0] || 'Intente nuevamente'), 'Error en el registro');
       }
     });
   }
@@ -58,30 +58,13 @@ export class AccountComponent {
   onLoginSubmit() {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
-
-        // -- DEBUG AND STYLES DEVELOPMENT -- //
-        // console.log('Registro exitoso', response);
-        //  const toastId = this.toastr.info('¡Funciona correctamente!', 'Éxito');
-        //  const toastId2 = this.toastr.error('¡Funciona correctamente!', 'Éxito');
-        //  const toastId3 = this.toastr.warning('¡Funciona correctamente!', 'Éxito');
-        //  const toastId4 = this.toastr.success('¡Funciona correctamente!', 'Éxito');
-        //  setTimeout(() => this.toastr.remove(toastId!), 30000);
-        //  setTimeout(() => this.toastr.remove(toastId2!), 30000);
-        //  setTimeout(() => this.toastr.remove(toastId3!), 30000);
-        //  setTimeout(() => this.toastr.remove(toastId4!), 30000);
-         //alert(response.access_token);
-        // -- DEBUG -- //
-
+          //For debugging and development, copy the comments at the bottom
           const toastId = this.toastr.success('¡Te has logueado Exitosamente!', 'Logueado');
-          //setTimeout(() => this.toastr.remove(toastId!), 30000);
       },
       error: (error) => {
         //console.error('Error en el registro', error);
         //alert('Error en el registro: ' + (error.error?.message || 'Intente nuevamente'));
-        if(error.error?.message == "Invalid credentials"){
-          error.error?.message == "Credenciales incorrectas"
-        }
-        const toastId = this.toastr.error((error.error?.message || 'Intente nuevamente'), 'Error en el registro');
+        const toastId = this.toastr.error((error.error?.message[0] || 'Intente nuevamente'), 'Error en el registro');
       }
     });
   }
@@ -103,3 +86,20 @@ export class AccountComponent {
     }
   }
 }
+
+
+
+
+
+ // -- DEBUG AND STYLES DEVELOPMENT -- //
+        // console.log('Registro exitoso', response);
+        //  const toastId = this.toastr.info('¡Funciona correctamente!', 'Éxito');
+        //  const toastId2 = this.toastr.error('¡Funciona correctamente!', 'Éxito');
+        //  const toastId3 = this.toastr.warning('¡Funciona correctamente!', 'Éxito');
+        //  const toastId4 = this.toastr.success('¡Funciona correctamente!', 'Éxito');
+        //  setTimeout(() => this.toastr.remove(toastId!), 30000);
+        //  setTimeout(() => this.toastr.remove(toastId2!), 30000);
+        //  setTimeout(() => this.toastr.remove(toastId3!), 30000);
+        //  setTimeout(() => this.toastr.remove(toastId4!), 30000);
+         //alert(response.access_token);
+        // -- DEBUG -- //

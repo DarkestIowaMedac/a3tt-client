@@ -31,6 +31,7 @@ export class DelCategoryModalComponent {
         this.isSubmitting = false;
         this.errorMessage = err.error?.message || 'Error al eliminar la categoría';
         console.error('Error:', err);
+        this.dialogRef.close({ success: false, err: err})
       }
     });
   }

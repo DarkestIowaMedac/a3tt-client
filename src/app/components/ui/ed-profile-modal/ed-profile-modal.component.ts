@@ -77,7 +77,8 @@ export class EdProfileModalComponent {
       error: (err) => {
         this.isSubmitting = false;
         console.error('Error updating profile:', err);
-        alert('Error updating profile: ' + (err.error?.message || 'Please try again'));
+        this.dialogRef.close({ success: false, err: err})
+        //alert('Error updating profile: ' + (err.error?.message || 'Please try again'));
       }
     });
   }

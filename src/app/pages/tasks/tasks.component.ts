@@ -6,6 +6,7 @@ import { TaskService } from '../../shared/services/task.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DelCategoryModalComponent } from '../../components/ui/del-category-modal/del-category-modal.component';
 import { CreateTaskModalComponent } from '../../components/ui/create-task-modal/create-task-modal.component';
+import { ToastrService } from '../../shared/toastr/toastr.service';
 
 @Component({
   selector: 'app-tasks',
@@ -25,7 +26,8 @@ export class TasksComponent implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private taskService: TaskService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -112,6 +114,10 @@ export class TasksComponent implements OnInit {
     if (result?.success) {
       this.updateTaskInLists(result.task);
     }
+    else if(result?.err){
+        const toastId = this.toastr.error((result?.err.error.message[0] || 'Intente nuevamente'),
+        'Error al editar la tarea');
+      }
   });
   }
 
@@ -141,6 +147,7 @@ deleteTask(task: any): void {
       this.removeTaskFromLists(task.id);
     },
     error: (err) => {
+      const toastId = this.toastr.error((err.error?.message[0] || 'Intente nuevamente'), 'Error al borrar la tarea');
       console.error('Error al eliminar la tarea:', err);
     }
   });
@@ -184,6 +191,7 @@ private removeTaskFromLists(taskId: number): void {
           this.loadCategoriesAndTasks(); // Recargamos la lista después de actualizar
         },
         error: (err) => {
+          const toastId = this.toastr.error((err.error?.message[0] || 'Intente nuevamente'), 'Error al actualizar');
           console.error('Error al actualizar la categoría:', err);
         }
       });
@@ -202,7 +210,12 @@ private removeTaskFromLists(taskId: number): void {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
+        //const toastId = this.toastr.success('¡Tareas borradas en cascada!', 'Borrada');
         this.loadCategoriesAndTasks(); // Recargar solo si se confirmó la eliminación
+      }
+      else if(result?.err){
+        const toastId = this.toastr.error((result?.err.error.message[0] || 'Intente nuevamente'),
+        'Error al borrar la categoría');
       }
     });
   }
@@ -227,6 +240,10 @@ private removeTaskFromLists(taskId: number): void {
         }
       }
     }
+    else if(result?.err){
+        const toastId = this.toastr.error((result?.err.error.message[0] || 'Intente nuevamente'),
+        'Error al crear la tarea');
+    }
   });
   }
 
@@ -240,6 +257,7 @@ toggleTaskState(task: any): void {
       this.updateTaskInLocalLists(task.id, newState);
     },
     error: (err) => {
+      const toastId = this.toastr.error((err.error?.message[0] || 'Intente nuevamente'), 'Error en el registro');
       console.error('Error al cambiar el estado:', err);
       // Puedes revertir visualmente el checkbox si falla
       task.state = task.state; // Esto forzará el estado anterior

@@ -7,6 +7,7 @@ import { EdProfileModalComponent } from '../../components/ui/ed-profile-modal/ed
 import { DelProfileModalComponent } from '../../components/ui/del-profile-modal/del-profile-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { forkJoin, map } from 'rxjs';
+import { ToastrService } from '../../shared/toastr/toastr.service';
 
 @Component({
   selector: 'app-profile',
@@ -33,7 +34,8 @@ export class ProfileComponent {
     private authService: AuthService,
     private apiService: ApiService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    // private snackBar: MatSnackBar
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -144,10 +146,12 @@ export class ProfileComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.authService.logout();
-        this.snackBar.open(result.message || 'Cuenta eliminada exitosamente', 'Cerrar', {
-          duration: 5000,
-          panelClass: ['success-snackbar']
-        });
+        const toastId = this.toastr.success('¡Datos cambiados, vuelva a loguearse para seguir '+ 
+          'conectado!', 'Información editada');
+      }
+      else if(result?.err){
+        const toastId = this.toastr.error((result?.err.error.message[0] || 'Intente nuevamente'), 
+        'Error al editar');
       }
     });
   }
@@ -161,16 +165,19 @@ export class ProfileComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
         this.authService.logout();
-        this.snackBar.open(result.message || 'Cuenta eliminada exitosamente', 'Cerrar', {
-        duration: 5000,
-        panelClass: ['success-snackbar']
-      });
+        const toastId = this.toastr.success('¡Esperamos haberle sido de utilidad, vuelva '+ 
+          'cuando quiera!', 'Cuenta eliminada');
+      }
+      else{
+        const toastId = this.toastr.error((result?.error?.message[0] || 'Intente nuevamente'), 'No se ha podido borrar su cuenta');
       }
     });
   }
 
   logout(): void {
     this.authService.logout(); 
+    const toastId = this.toastr.info('Sesión Cerrada, '+ 
+          'vuelva cuando quiera!', 'Sesión Cerrada');
   }
   
 }
