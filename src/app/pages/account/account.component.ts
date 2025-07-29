@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../shared/services/api.service';
 import { AuthService } from '../../shared/services/auth.service';
+import { ToastrService } from '../../shared/toastr/toastr.service';
 
 @Component({
   selector: 'app-account',
@@ -33,6 +34,7 @@ export class AccountComponent {
   constructor(
     private apiService: ApiService,
     private authService: AuthService, 
+    private toastr: ToastrService
   ) {}
 
   onRegisterSubmit() {
@@ -42,8 +44,13 @@ export class AccountComponent {
         alert('¡Registro exitoso!');
       },
       error: (error) => {
-        console.error('Error en el registro', error);
-        alert('Error en el registro: ' + (error.error?.message || 'Intente nuevamente'));
+        //console.error('Error en el registro', error);
+        //alert('Error en el registro: ' + (error.error?.message || 'Intente nuevamente'));
+        //alert(error.error.message)
+        if(error.error?.message == "Invalid credentials"){
+          error.error?.message == "Credenciales incorrectas"
+        }
+        const toastId = this.toastr.error((error.error?.message || 'Intente nuevamente'), 'Error en el registro');
       }
     });
   }
@@ -51,12 +58,30 @@ export class AccountComponent {
   onLoginSubmit() {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
-        console.log('Registro exitoso', response);
-        alert(response.access_token);
+
+        // -- DEBUG AND STYLES DEVELOPMENT -- //
+        // console.log('Registro exitoso', response);
+        //  const toastId = this.toastr.info('¡Funciona correctamente!', 'Éxito');
+        //  const toastId2 = this.toastr.error('¡Funciona correctamente!', 'Éxito');
+        //  const toastId3 = this.toastr.warning('¡Funciona correctamente!', 'Éxito');
+        //  const toastId4 = this.toastr.success('¡Funciona correctamente!', 'Éxito');
+        //  setTimeout(() => this.toastr.remove(toastId!), 30000);
+        //  setTimeout(() => this.toastr.remove(toastId2!), 30000);
+        //  setTimeout(() => this.toastr.remove(toastId3!), 30000);
+        //  setTimeout(() => this.toastr.remove(toastId4!), 30000);
+         //alert(response.access_token);
+        // -- DEBUG -- //
+
+          const toastId = this.toastr.success('¡Te has logueado Exitosamente!', 'Logueado');
+          //setTimeout(() => this.toastr.remove(toastId!), 30000);
       },
       error: (error) => {
-        console.error('Error en el registro', error);
-        alert('Error en el registro: ' + (error.error?.message || 'Intente nuevamente'));
+        //console.error('Error en el registro', error);
+        //alert('Error en el registro: ' + (error.error?.message || 'Intente nuevamente'));
+        if(error.error?.message == "Invalid credentials"){
+          error.error?.message == "Credenciales incorrectas"
+        }
+        const toastId = this.toastr.error((error.error?.message || 'Intente nuevamente'), 'Error en el registro');
       }
     });
   }

@@ -1,0 +1,84 @@
+@use 'bootstrap/scss/bootstrap' as *;
+@use 'sass:color';
+// Variables de color
+$toast-colors: (
+  success: (
+    bg: #e8f5e9,
+    text: #2e7d32,
+    border: #28a745,
+    icon: "\F26C",
+    size: 1.7rem,
+    pdleft: 60px,
+    left: 20px,
+  ),
+  error: (
+    bg: #ffebee,
+    text: #c62828,
+    border: #dc3545,
+    icon: "\F62A",
+    size: 3rem,
+    pdleft: 60px,
+    left: 10px,
+  ),
+  info: (
+    bg: #e3f2fd,
+    text: #1565c0,
+    border: #17a2b8,
+    icon: "\F430",
+    size: 1.7rem,
+    pdleft: 60px,
+    left: 20px,
+  ),
+  warning: (
+    bg: #fff8e1,
+    text: #ff6f00,
+    border: #ffc107,
+    icon: "\F33A",
+    size: 1.7rem,
+    pdleft: 60px,
+    left: 20px,
+  )
+);
+
+/* Estilos base */
+#toast-container {
+  .toast {
+    background-image: none !important;
+    position: relative;
+  }
+}
+
+  /* Estilos por tipo usando las variables */
+  @each $type, $colors in $toast-colors {
+    .toast-#{$type} {
+     background-position: unset !important;
+     background-size: 0 0 !important; //Esto elimina el icono por defecto de TOASTR MUY IMPORTANTE!
+      background-color: map-get($colors, bg) !important;
+      border-left: 5px solid map-get($colors, border) !important;
+      color: map-get($colors, text) !important;
+      padding-left: map-get($colors, pdleft) !important;
+
+      &::before {
+        left: map-get($colors, left) !important;;
+        content: map-get($colors, icon) !important;
+        font-family: 'bootstrap-icons' !important;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: map-get($colors, size);
+        color: map-get($colors, border) !important;
+        display: inline-block !important;
+      }
+      
+      .toast-title {
+        color: color.adjust(map-get($colors, text), $lightness: -10%) !important;
+        font-weight: 700;
+      }
+      
+      .toast-message {
+        color: map-get($colors, text) !important;
+      }
+    }
+  }
+  
+

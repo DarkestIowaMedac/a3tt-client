@@ -8,6 +8,8 @@ import { PagesModule } from './pages/pages.module';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
+import { ToastrModule } from './shared/toastr/toastr.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -15,9 +17,11 @@ import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     LayoutModule,
     PagesModule,
+    ToastrModule.forRoot() 
   ],
   providers: [provideHttpClient(withInterceptorsFromDi() ), 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
