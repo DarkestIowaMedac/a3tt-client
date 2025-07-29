@@ -66,6 +66,10 @@ export class ProfileComponent {
         this.isLoading = false;
       },
       error: (err) => {
+        if(Array.isArray(err?.error.message)){
+          err.error.message = err.error.message[0]
+        }
+        const toastId = this.toastr.error((err.error.message || 'Intente nuevamente'), 'Fallo al cargar su información');
         console.error('Error loading profile:', err);
         this.errorMessage = 'Error al cargar el perfil';
         this.isLoading = false;
@@ -150,7 +154,10 @@ export class ProfileComponent {
           'conectado!', 'Información editada');
       }
       else if(result?.err){
-        const toastId = this.toastr.error((result?.err.error.message[0] || 'Intente nuevamente'), 
+        if(Array.isArray(result?.err.error.message)){
+          result.err.error.message = result.err.error.message[0]
+        }
+        const toastId = this.toastr.error((result?.err.error.message || 'Intente nuevamente'), 
         'Error al editar');
       }
     });
@@ -169,7 +176,10 @@ export class ProfileComponent {
           'cuando quiera!', 'Cuenta eliminada');
       }
       else{
-        const toastId = this.toastr.error((result?.error?.message[0] || 'Intente nuevamente'), 'No se ha podido borrar su cuenta');
+        if(Array.isArray(result?.err.error.message)){
+          result.err.error.message = result.err.error.message[0]
+        }
+        const toastId = this.toastr.error((result?.err.error.message || 'Intente nuevamente'), 'No se ha podido borrar su cuenta');
       }
     });
   }

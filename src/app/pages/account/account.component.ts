@@ -47,10 +47,10 @@ export class AccountComponent {
         //console.error('Error en el registro', error);
         //alert('Error en el registro: ' + (error.error?.message || 'Intente nuevamente'));
         //alert(error.error.message)
-        if(error.error?.message[0] == "Invalid credentials"){
-          error.error?.message[0] == "Credenciales incorrectas"
+        if(Array.isArray(error.error?.message)){
+          error.error.message = error.error.message[0]
         }
-        const toastId = this.toastr.error((error.error?.message[0] || 'Intente nuevamente'), 'Error en el registro');
+        const toastId = this.toastr.error((error.error?.message || 'Intente nuevamente'), 'Error en el registro');
       }
     });
   }
@@ -64,7 +64,14 @@ export class AccountComponent {
       error: (error) => {
         //console.error('Error en el registro', error);
         //alert('Error en el registro: ' + (error.error?.message || 'Intente nuevamente'));
-        const toastId = this.toastr.error((error.error?.message[0] || 'Intente nuevamente'), 'Error en el registro');
+        if(Array.isArray(error.error?.message)){
+          error.error.message = error.error.message[0]
+        }
+        console.log(error.error.message)
+        if(error.error.message == "Invalid credentials"){
+          error.error.message = "Credenciales incorrectas"
+        }
+        const toastId = this.toastr.error((error.error?.message || 'Intente nuevamente'), 'Error en el registro');
       }
     });
   }

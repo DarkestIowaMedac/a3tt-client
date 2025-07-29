@@ -115,7 +115,10 @@ export class TasksComponent implements OnInit {
       this.updateTaskInLists(result.task);
     }
     else if(result?.err){
-        const toastId = this.toastr.error((result?.err.error.message[0] || 'Intente nuevamente'),
+        if(Array.isArray(result?.err.error.message)){
+          result.err.error.message = result.err.error.message[0]
+        }
+        const toastId = this.toastr.error((result?.err.error.message || 'Intente nuevamente'),
         'Error al editar la tarea');
       }
   });
@@ -214,7 +217,10 @@ private removeTaskFromLists(taskId: number): void {
         this.loadCategoriesAndTasks(); // Recargar solo si se confirmó la eliminación
       }
       else if(result?.err){
-        const toastId = this.toastr.error((result?.err.error.message[0] || 'Intente nuevamente'),
+        if(Array.isArray(result?.err.error.message)){
+          result.err.error.message = result.err.error.message[0]
+        }
+        const toastId = this.toastr.error((result?.err.error.message || 'Intente nuevamente'),
         'Error al borrar la categoría');
       }
     });
@@ -241,7 +247,10 @@ private removeTaskFromLists(taskId: number): void {
       }
     }
     else if(result?.err){
-        const toastId = this.toastr.error((result?.err.error.message[0] || 'Intente nuevamente'),
+        if(Array.isArray(result?.err.error.message)){
+          result.err.error.message = result.err.error.message[0]
+        }
+        const toastId = this.toastr.error((result?.err.error.message || 'Intente nuevamente'),
         'Error al crear la tarea');
     }
   });
