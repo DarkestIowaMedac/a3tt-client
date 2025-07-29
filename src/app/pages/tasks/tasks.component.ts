@@ -63,7 +63,7 @@ export class TasksComponent implements OnInit {
       this.taskService.getByCategory(categoryId, 1)  // Completadas
     ]).pipe(
       map(([pendingTasks, completedTasks]) => {
-        if (categoryId === 0) {
+        if (categoryId === -1) {
           this.uncategorizedTasks = {
             pending: pendingTasks,
             completed: completedTasks
@@ -79,8 +79,8 @@ export class TasksComponent implements OnInit {
   }
 
   getTasksByCategory(categoryId: number, state: number): any[] {
-    if (categoryId === 0) {
-      return state === 0 ? this.uncategorizedTasks.pending : this.uncategorizedTasks.completed;
+    if (categoryId === -1) {
+      return state === 1 ? this.uncategorizedTasks.pending : this.uncategorizedTasks.completed;
     }
     const categoryTasks = this.tasksByCategory[categoryId];
     return categoryTasks ? (state === 0 ? categoryTasks.pending : categoryTasks.completed) : [];

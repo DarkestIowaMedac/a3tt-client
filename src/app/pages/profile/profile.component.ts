@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EdProfileModalComponent } from '../../components/ui/ed-profile-modal/ed-profile-modal.component';
 import { DelProfileModalComponent } from '../../components/ui/del-profile-modal/del-profile-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoin, map } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +38,7 @@ export class ProfileComponent {
 
   ngOnInit(): void {
     this.loadUserData();
-    //this.loadStatistics();
+    this.loadStatistics();
   }
 
   loadUserData(): void {
@@ -70,6 +71,70 @@ export class ProfileComponent {
     })
   }
 
+  loadStatistics(): void {
+    // Obtener categorías del usuario
+    const categories$ = this.apiService.get('category/user');
+    
+    // Obtener tareas sin categoría (pendientes y completadas)
+    const uncategorizedPending$ = this.apiService.get('task/category/-1/0');
+    const uncategorizedCompleted$ = this.apiService.get('task/category/-1/1');
+    
+    forkJoin([categories$, uncategorizedPending$, uncategorizedCompleted$]).subscribe({
+      next: ([categories, uncategorizedPending, uncategorizedCompleted]) => {
+        // Calcular total de tareas pendientes y completadas de categorías
+        let totalPending = uncategorizedPending.length;
+        let totalCompleted = uncategorizedCompleted.length;
+        
+        if (categories.length === 0) {
+          this.updateStats(totalCompleted, totalPending, 0);
+          return;
+        }
+
+        // Sumar tareas de cada categoría
+        const categoryTasksRequests = categories.map((category:any) => 
+          forkJoin([
+            this.apiService.get(`task/category/${category.id}/0`), // Pendientes
+            this.apiService.get(`task/category/${category.id}/1`)  // Completadas
+          ]).pipe(
+            map(([pending, completed]) => {
+              return {
+                pendingCount: pending.length,
+                completedCount: completed.length
+              };
+            })
+          )
+        );
+        
+        // Solución definitiva para el error TS2769
+  forkJoin(categoryTasksRequests).subscribe({
+    next: (results: unknown) => {
+      const typedResults = results as {pendingCount: number, completedCount: number}[];
+      typedResults.forEach(result => {
+        totalPending += result.pendingCount;
+        totalCompleted += result.completedCount;
+      });
+      this.updateStats(totalCompleted, totalPending, categories.length);
+    },
+          error: (err: any) => {
+            console.error('Error loading category tasks:', err);
+            this.errorMessage = 'Error al cargar estadísticas';
+          }
+        });
+      }, // <-- Cierre del primer next
+      error: (err: any) => {
+        console.error('Error loading statistics:', err);
+        this.errorMessage = 'Error al cargar estadísticas';
+      }
+    });
+  }
+  private updateStats(completed: number, pending: number, categories: number): void {
+    this.user.stats = {
+      tasksCompleted: completed,
+      tasksPending: pending,
+      categories: categories
+    };
+  }  
+
   openEditModal(): void {
     const dialogRef = this.dialog.open(EdProfileModalComponent, {
       width: '500px',
@@ -78,7 +143,11 @@ export class ProfileComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.success) {
-        this.user.name = result.name; // Actualiza el nombre si se editó
+        this.authService.logout();
+        this.snackBar.open(result.message || 'Cuenta eliminada exitosamente', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['success-snackbar']
+        });
       }
     });
   }
