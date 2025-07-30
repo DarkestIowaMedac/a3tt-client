@@ -1,11 +1,40 @@
 <div class="container text-center mt-5">
   <div class="jumbotron bg-light p-5 rounded">
-    <h1 class="display-4">Tu mejor aplicación de gestión de tareas</h1>
+    <!-- Título principal -->
+    <h1 class="display-4 fw-bold">A3 Task Tracker</h1>
     <p class="lead">Organiza tu vida, aumenta tu productividad y nunca olvides nada importante.</p>
+    
     <hr class="my-4">
-    <p>Comienza ahora mismo:</p>
-    <a class="btn btn-primary btn-lg" routerLink="/account">
-      <i class="fas fa-user-plus me-2"></i>Regístrate
-    </a>
+    
+    <!-- Sección "Qué ofrece la app" -->
+    <div class="features-section text-start my-5">
+      <h2 class="mb-4">¿Qué puedes esperar de A3 Task Tracker?</h2>
+      <ul class="list-unstyled">
+        <li class="mb-3">
+          <i class="fas fa-check-circle text-primary me-2"></i>
+          <strong>Interfaz amigable:</strong> Navega fácilmente y gestiona tus tareas sin complicaciones.
+        </li>
+        <li class="mb-3">
+          <i class="fas fa-check-circle text-primary me-2"></i>
+          <strong>Listas de tareas personalizables:</strong> Crea listas adaptadas a tus necesidades.
+        </li>
+        <li class="mb-3">
+          <i class="fas fa-check-circle text-primary me-2"></i>
+          <strong>Seguimiento de progreso:</strong> Visualiza tu avance y mantente motivado.
+        </li>
+        <li class="mb-3">
+          <i class="fas fa-check-circle text-primary me-2"></i>
+          <strong>Organización personalizada:</strong> Crea diferentes categorías para tener todo organizado a tu manera.
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Mensaje de registro con icono -->
+    <div class="cta-section">
+      <p class="mb-3">Busca el siguiente icono en la barra de navegación para registrarte:</p>
+      <a routerLink="/account">
+        <i class="fas fa-user fa-2x text-primary"></i>
+      </a>
+    </div>
   </div>
 </div>
